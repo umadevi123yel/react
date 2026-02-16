@@ -142,7 +142,7 @@ const UsersGrid: React.FC = () => {
   };
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "name", headerName: "Name", width: 150 },
+    { field: "name", headerName: "User Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "companyName", headerName: "Company Name", width: 200 },
     {
