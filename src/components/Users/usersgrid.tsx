@@ -19,17 +19,18 @@ const UsersGrid: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   //from store
   const users = useUserStore((state) => state.users);
   const addUserAction = useUserStore((s) => s.addUserAction);
   const updateUserAction = useUserStore((s) => s.updateUserAction);
   const deleteUserAction = useUserStore((s) => s.deleteUserAction);
   const [form, setForm] = useState<User>({
-    id: 0,
+    // _id: "",
     name: "",
     email: "",
-    companyName: "",
+    age: 0,
+    // companyName: "",
   });
   console.log("Users in component:", users);
   // useEffect(() => {
@@ -91,7 +92,7 @@ const UsersGrid: React.FC = () => {
   //   }
   // };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setDeleteId(id);
     setDeleteOpen(true);
   };
@@ -118,7 +119,7 @@ const UsersGrid: React.FC = () => {
   }, []);
   const openAdd = () => {
     setSelectedUser(null);
-    setForm({ id: 0, name: "", email: "", companyName: "" });
+    setForm({ name: "", email: "", age: 0 });
     setOpen(true);
   };
   const openEdit = (user: User) => {
@@ -141,10 +142,10 @@ const UsersGrid: React.FC = () => {
     setDeleteId(null);
   };
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
+    // { field: "_id", headerName: "ID", width: 90 },
     { field: "name", headerName: "User Name", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "companyName", headerName: "Company Name", width: 200 },
+    { field: "age", headerName: "Age", width: 200 },
     {
       field: "actions",
       headerName: "Actions",
@@ -165,7 +166,7 @@ const UsersGrid: React.FC = () => {
             variant="outlined"
             color="error"
             size="small"
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row._id)}
           >
             Delete
           </Button>
@@ -180,10 +181,9 @@ const UsersGrid: React.FC = () => {
         sx={{ mb: 2 }}
         onClick={() => {
           setSelectedUser({
-            id: 0,
             name: "",
             email: "",
-            companyName: "",
+            age: 0,
           });
           openAdd();
         }}
@@ -194,7 +194,7 @@ const UsersGrid: React.FC = () => {
         Add User
       </Button> */}
 
-      <DataGrid rows={users} columns={columns} />
+      <DataGrid rows={users} columns={columns} getRowId={(row) => row._id} />
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>{selectedUser ? "Edit User" : "Add User"}</DialogTitle>
 
@@ -219,10 +219,10 @@ const UsersGrid: React.FC = () => {
 
           <TextField
             margin="dense"
-            label="Company Name"
-            name="companyName"
+            label="Age"
+            name="age"
             fullWidth
-            value={form?.companyName}
+            value={form?.age}
             onChange={handleChange}
           />
         </DialogContent>

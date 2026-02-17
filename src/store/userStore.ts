@@ -5,14 +5,14 @@ import {
   getUsers,
   updateUser,
 } from "../services/userService";
-import type { User } from "../../src/models/usermodel";
+import type { User, UserApi } from "../../src/models/usermodel";
 interface UserState {
-  users: User[];
+  users: UserApi[];
 
   fetchUsers: () => Promise<void>;
   addUserAction: (user: User) => Promise<void>;
-  updateUserAction: (user: User) => Promise<void>;
-  deleteUserAction: (id: number | null) => Promise<void>;
+  updateUserAction: (user: UserApi) => Promise<void>;
+  deleteUserAction: (id: string | null) => Promise<void>;
 }
 export const useUserStore = create<UserState>((set) => ({
   users: [],
@@ -22,26 +22,22 @@ export const useUserStore = create<UserState>((set) => ({
     console.log("Fetched users:", data);
     set({ users: data });
   },
-  addUserAction: async (user) => {
+  addUserAction: async (user: User) => {
     const newUser = await addUser(user);
     set((state) => ({
-      users: [
-        ...state.users,
-        { ...newUser, id: Math.floor(Math.random() * 100000) },
-      ],
+      users: [...state.users, { ...newUser }],
     }));
   },
-  updateUserAction: async (user) => {
+  updateUserAction: async (user: UserApi) => {
     const updated = await updateUser(user);
-
     set((state) => ({
-      users: state.users.map((u) => (u.id === updated.id ? updated : u)),
+      users: state.users.map((u) => (u._id === updated._id ? updated : u)),
     }));
   },
-  deleteUserAction: async (id) => {
+  deleteUserAction: async (id: string | null) => {
     await deleteUser(id);
     set((state) => ({
-      users: state.users.filter((u) => u.id !== id),
+      users: state.users.filter((u) => u._id !== id),
     }));
   },
 }));
