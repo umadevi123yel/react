@@ -1,9 +1,9 @@
 import type { User, UserApi } from "../models/usermodel";
 
-const API_URL =
-  "https://node-mongo-app-hqfya7hue3ddh4d3.centralindia-01.azurewebsites.net";
+const API_URL = "https://node-l602.onrender.com";
 
 /* GET users */
+// "https://node-mongo-app-hqfya7hue3ddh4d3.centralindia-01.azurewebsites.net";
 export const getUsers = async (): Promise<UserApi[]> => {
   const response = await fetch(`${API_URL}/api/users`);
 
