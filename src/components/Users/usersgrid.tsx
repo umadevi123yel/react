@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
-import type { User } from "../../models/usermodel";
+import type { User, UserApi } from "../../models/usermodel";
 import { Button, Stack } from "@mui/material";
 import {
   Dialog,
@@ -122,18 +122,23 @@ const UsersGrid: React.FC = () => {
     setForm({ name: "", email: "", age: 0 });
     setOpen(true);
   };
-  const openEdit = (user: User) => {
+  const openEdit = (user: UserApi) => {
     setSelectedUser(user);
     setForm(user);
     setOpen(true);
   };
   const handleSave = async () => {
-    if (selectedUser) {
-      await updateUserAction(form);
+    if (selectedUser && form._id) {
+      await updateUserAction({
+        _id: form._id,
+        name: form.name,
+        email: form.email,
+        age: form.age,
+      });
     } else {
       await addUserAction(form);
     }
-
+    setForm({ name: "", email: "", age: 0 });
     setOpen(false);
   };
   const confirmDelete = async () => {
